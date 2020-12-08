@@ -52,7 +52,7 @@ class App extends Component {
     }})
   }
 
-  calculateFaceLocation = (data) => {
+  calculateFaceLocations = (data) => {
     const outputs = data.outputs[0].data.regions.map(r => r.region_info.bounding_box);
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
@@ -69,7 +69,7 @@ class App extends Component {
     return faceBoxes
   }
 
-  displayFaceBox = (boxes) => {
+  displayFaceBoxes = (boxes) => {
     this.setState({boxes: boxes});
   }
 
@@ -102,7 +102,7 @@ class App extends Component {
             })
             .catch(console.log)
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        this.displayFaceBoxes(this.calculateFaceLocations(response))
       })
       .catch(err => console.log(err));
   }
