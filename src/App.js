@@ -5,8 +5,10 @@ import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
+import Profile from './components/Profile/Profile'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import Modal from './components/Modal/Modal';
 import './App.css';
 
 const particlesOptions = {
@@ -27,6 +29,7 @@ const initialState = {
   boxes: [],
   route: 'signin',
   isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
@@ -77,6 +80,12 @@ class App extends Component {
     this.setState({input: event.target.value});
   }
 
+  toggleModal = () => {
+    this.setState(prevState =>({
+      isProfileOpen: !prevState.isProfileOpen
+    }))
+  }
+
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
       fetch('http://localhost:3000/imageurl', {
@@ -109,7 +118,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState(initialState)
+      return this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
@@ -117,13 +126,19 @@ class App extends Component {
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, boxes } = this.state;
+    const { isSignedIn, imageUrl, route, boxes, isProfileOpen } = this.state;
     return (
       <div className="App">
          <Particles className='particles'
           params={particlesOptions}
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} toggleModal={this.toggleModal} />
+        {
+          isProfileOpen &&
+          <Modal>
+            <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal} />
+          </Modal>
+        }
         { route === 'home'
           ? <div>
               <Logo />
